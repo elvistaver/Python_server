@@ -27,7 +27,7 @@ class myhandler(BaseHTTPRequestHandler):
             html="""
             <form action="submit_signup" method="post">
                 <label for="user_name"> Enter Name</label>
-                <input type="text" id="user_name" name= "user_name"</input>
+                <input type="text" id="user_name" name= "user_name">
                 <button type="submit" > submit</button>
             </form>
             """
