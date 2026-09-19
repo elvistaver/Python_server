@@ -1,12 +1,13 @@
 # Simple Python HTTP Server
 
-This project is a basic local web server built using Python's built-in tools. It serves a fun welcome page, handles custom name greetings using website links, and shows an error page for any invalid links.
+This project is a basic local web server built using Python's built-in tools. It serves a fun welcome page, handles custom name greetings using web links, and includes a signup form that processes user submissions.
 
 ## Features
 
 * **Built-in Tools**: Runs completely on Python without installing extra libraries.
 * **Custom Welcome Page**: Displays a moving marquee text on the main homepage.
 * **Dynamic Greetings**: Reads your name from the web link to show a personalized message.
+* **HTML Form Handling**: Serves an interactive HTML form and processes submitted data using **POST requests**.
 * **Error Handling**: Sends a clear 404 "Page Not Found" message for invalid links.
 
 ## Prerequisites
@@ -30,9 +31,13 @@ Follow these easy steps to get your server running:
 Open your web browser and test these links:
 
 * **Main Page**: `http://localhost:8000/` 
-  * Displays the moving marquee welcome message.
-* **Personalized Homepage**: `http://localhost:8000/homepage?name=YourName`
-  * Greets you dynamically! For example, `http://localhost:8000/homepage?name=Elvis` will say **\*Welcome Elvis!\***. 
-  * If you just go to `http://localhost:8000/homepage`, it defaults to **\*Welcome Guest!\***.
-* **Invalid Pages**: `http://localhost:8000/other_page_not_in_path`
+  * Displays the moving marquee welcome message (**GET**).
+* **Personalized Greeting**: `http://localhost:8000/welcome?name=YourName`
+  * Greets you dynamically (**GET**)! For example, `http://localhost:8000/welcome?name=Elvis` will say `*Welcome Elvis!*`. 
+  * If you go to `http://localhost:8000/welcome` without a query, it defaults to `*Welcome Guest!*`.
+* **Interactive Signup Form**: `http://localhost:8000/homepage`
+  * Displays a text input form where you can enter a name and press submit (**GET**).
+* **Form Processing**: `http://localhost:8000/submit_signup`
+  * Receives data submitted from the homepage form (**POST**) and returns a customized `Hello YourName!` confirmation message.
+* **Invalid Pages**: `http://localhost:8000/any_other_page`
   * Returns a `404 Error:Page Not Found` message.
