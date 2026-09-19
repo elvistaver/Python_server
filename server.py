@@ -13,7 +13,7 @@ class myhandler(BaseHTTPRequestHandler):
             self.send_header("content-Type", "text/html")
             self.end_headers()
             self.wfile.write(b"<h1><marquee> welcome to first python server...</marquee></h1>")
-        elif parsed_url.path=="/homepage":
+        elif parsed_url.path=="/welcome":
             unpack=parse_qs(parsed_url.query)
             extract=unpack.get("name",["Guest"])
             user_name=extract[0]
@@ -23,11 +23,38 @@ class myhandler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(message.encode("utf-8"))
+        elif self.path=="/homepage":
+            html="""
+            <form action="submit_signup" method="post">
+                <label for="user_name"> Enter Name</label>
+                <input type="text" id="user_name" name= "user_name"</input>
+                <button type="submit" > submit</button>
+            </form>
+            """
+            self.send_response(200)
+            print("ok;successful")
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(html.encode("utf-8"))
         else:
             self.send_response(404)
             print("Faild;404-Error: Not Found")
             self.end_headers()
             self.wfile.write(b"404 Error:Page Not Found")
+    def do_POST(self):
+        if self.path=="/submit_signup":
+            content_Length=int(self.headers["Content-Length"])
+            read_data= self.rfile.read(content_Length)
+            decode_data= read_data.decode("utf-8")
+            extract_data= parse_qs(decode_data)
+            grab_data=extract_data.get("user_name", ["Guest"])
+            user_name= grab_data[0]
+            message= f"Hello {user_name}!"
+            self.send_response(200)
+            print("ok; successful")
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(message.encode("utf-8"))
 
 server=HTTPServer(("localhost", 8000), myhandler)
 print("server running on http://localhost:8000")
