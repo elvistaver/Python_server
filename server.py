@@ -46,15 +46,22 @@ class myhandler(BaseHTTPRequestHandler):
             content_Length=int(self.headers["Content-Length"])
             read_data= self.rfile.read(content_Length)
             decode_data= read_data.decode("utf-8")
-            extract_data= parse_qs(decode_data)
+            extract_data= parse_qs(decode_data, keep_blank_values=True)
             grab_data=extract_data.get("user_name", ["Guest"])
             user_name= grab_data[0]
-            message= f"Hello {user_name}!"
-            self.send_response(200)
-            print("ok; successful")
-            self.send_header("Content-Type", "text/html")
-            self.end_headers()
-            self.wfile.write(message.encode("utf-8"))
+            if not user_name:
+                self.send_response(400)
+                print("400 Error: Bad Request")
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+                self.wfile.write(b"inavlid: empty field")
+            else:
+                message= f"Hello {user_name}!"
+                self.send_response(200)
+                print("ok; successful")
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+                self.wfile.write(message.encode("utf-8"))
 
 server=HTTPServer(("localhost", 8000), myhandler)
 print("server running on http://localhost:8000")
