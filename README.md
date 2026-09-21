@@ -1,14 +1,16 @@
 # Simple Python HTTP Server
 
-This project is a basic local web server built using Python's built-in tools. It serves a fun welcome page, handles custom name greetings using web links, and includes a signup form that processes user submissions.
+This project is a basic local web server built using Python's built-in tools. It serves a fun welcome page, handles custom name greetings using web links, and includes a signup form that processes and validates user submissions.
 
 ## Features
 
-* **Built-in Tools**: Runs completely on Python without installing extra libraries.
-* **Custom Welcome Page**: Displays a moving marquee text on the main homepage.
-* **Dynamic Greetings**: Reads your name from the web link to show a personalized message.
-* **HTML Form Handling**: Serves an interactive HTML form and processes submitted data using **POST requests**.
-* **Error Handling**: Sends a clear 404 "Page Not Found" message for invalid links.
+* **Built-in Tools:** Runs completely on Python without installing extra libraries.
+* **Custom Welcome Page:** Displays a moving marquee text on the main homepage.
+* **Dynamic Greetings:** Reads your name from the web link to show a personalized message.
+* **HTML Form Handling & Validation:** Serves an interactive HTML form and processes submitted data using POST requests. It ensures empty submissions are safely handled using `keep_blank_values=True`.
+* **Error Handling:** 
+  * Sends a clear `404 Page Not Found` message for invalid links.
+  * Sends a `400 Bad Request` validation error if a user submits an empty name field in the signup form.
 
 ## Prerequisites
 
@@ -18,10 +20,10 @@ You only need **Python 3** installed on your computer to run this project.
 
 Follow these easy steps to get your server running:
 
-1. **Save the Code**: Copy the Python code and save it in a file named `server.py`.
-2. **Open Terminal**: Open your command line, terminal, or command prompt.
-3. **Navigate to Folder**: Move into the folder where you saved your file (e.g., `cd path/to/folder`).
-4. **Start the Server**: Run the following command:
+1. **Save the Code:** Copy the Python code and save it in a file named `server.py`.
+2. **Open Terminal:** Open your command line, terminal, or command prompt.
+3. **Navigate to Folder:** Move into the folder where you saved your file (e.g., `cd path/to/folder`).
+4. **Start the Server:** Run the following command:
    ```bash
    python3 server.py
    ```
@@ -30,14 +32,15 @@ Follow these easy steps to get your server running:
 
 Open your web browser and test these links:
 
-* **Main Page**: `http://localhost:8000/` 
-  * Displays the moving marquee welcome message (**GET**).
-* **Personalized Greeting**: `http://localhost:8000/welcome?name=YourName`
-  * Greets you dynamically (**GET**)! For example, `http://localhost:8000/welcome?name=Elvis` will say `*Welcome Elvis!*`. 
-  * If you go to `http://localhost:8000/welcome` without a query, it defaults to `*Welcome Guest!*`.
-* **Interactive Signup Form**: `http://localhost:8000/homepage`
-  * Displays a text input form where you can enter a name and press submit (**GET**).
-* **Form Processing**: `http://localhost:8000/submit_signup`
-  * Receives data submitted from the homepage form (**POST**) and returns a customized `Hello YourName!` confirmation message.
-* **Invalid Pages**: `http://localhost:8000/any_other_page`
-  * Returns a `404 Error:Page Not Found` message.
+* **Main Page:** `http://localhost:8000/`
+  Displays the moving marquee welcome message (GET).
+* **Personalized Greeting:** `http://localhost:8000/welcome?name=YourName`
+  Greets you dynamically (GET)! For example, `http://localhost:8000/welcome?name=Elvis` will say `*Welcome Elvis!*`. If you visit without a query name, it defaults to `*Welcome Guest!*`.
+* **Interactive Signup Form:** `http://localhost:8000/homepage`
+  Displays a text input form where you can enter a name and press submit (GET).
+* **Form Processing:** `http://localhost:8000/submit_signup`
+  Receives data submitted from the homepage form (POST). 
+  * If a name is provided, it returns a customized `Hello YourName!` confirmation message.
+  * If the input field is left empty, it safely triggers a validation check and returns an `invalid: empty field` error (400 Bad Request).
+* **Invalid Pages:** `http://localhost:8000/any_other_page`
+  Returns a `404 Error:Page Not Found` message.
