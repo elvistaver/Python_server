@@ -5,6 +5,11 @@ from urllib.parse import urlparse, parse_qs
 
 
 class myhandler(BaseHTTPRequestHandler):
+    def validate_username(self, username):
+        if username=="":
+            return False
+        else:
+            return True
     def do_GET(self):
         parsed_url=urlparse(self.path)
         if self.path=="/":
@@ -25,7 +30,7 @@ class myhandler(BaseHTTPRequestHandler):
             self.wfile.write(message.encode("utf-8"))
         elif self.path=="/homepage":
             html="""
-            <form action="submit_signup" method="post">
+            <form action="/submit_signup" method="post">
                 <label for="user_name"> Enter Name</label>
                 <input type="text" id="user_name" name= "user_name">
                 <button type="submit" > submit</button>
@@ -49,7 +54,10 @@ class myhandler(BaseHTTPRequestHandler):
             extract_data= parse_qs(decode_data, keep_blank_values=True)
             grab_data=extract_data.get("user_name", ["Guest"])
             user_name= grab_data[0]
-            if not user_name:
+
+            is_valid=self.validate_username(user_name)
+
+            if is_valid==False:
                 self.send_response(400)
                 print("400 Error: Bad Request")
                 self.send_header("Content-Type", "text/html")
@@ -66,3 +74,5 @@ class myhandler(BaseHTTPRequestHandler):
 server=HTTPServer(("localhost", 8000), myhandler)
 print("server running on http://localhost:8000")
 server.serve_forever()
+
+                
