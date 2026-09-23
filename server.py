@@ -1,4 +1,4 @@
-# python server using GET http request method
+# python server using GET and POST http request method
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs 
@@ -10,6 +10,9 @@ class myhandler(BaseHTTPRequestHandler):
             return False
         else:
             return True
+    def welcome_user(self,username):
+        message=f"Welcome {username}"
+        return message
     def do_GET(self):
         parsed_url=urlparse(self.path)
         if self.path=="/":
@@ -19,15 +22,15 @@ class myhandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b"<h1><marquee> welcome to first python server...</marquee></h1>")
         elif parsed_url.path=="/welcome":
-            unpack=parse_qs(parsed_url.query)
+            unpack= parse_qs(parsed_url.query)
             extract=unpack.get("name",["Guest"])
             user_name=extract[0]
-            message=f"*Welcome {user_name}!*"
+            msg=self.welcome_user(user_name)
             self.send_response(200)
             print("ok; successful")
             self.send_header("Content-Type", "text/html")
             self.end_headers()
-            self.wfile.write(message.encode("utf-8"))
+            self.wfile.write(msg.encode("utf-8"))
         elif self.path=="/homepage":
             html="""
             <form action="/submit_signup" method="post">
@@ -54,9 +57,7 @@ class myhandler(BaseHTTPRequestHandler):
             extract_data= parse_qs(decode_data, keep_blank_values=True)
             grab_data=extract_data.get("user_name", ["Guest"])
             user_name= grab_data[0]
-
             is_valid=self.validate_username(user_name)
-
             if is_valid==False:
                 self.send_response(400)
                 print("400 Error: Bad Request")
@@ -75,4 +76,3 @@ server=HTTPServer(("localhost", 8000), myhandler)
 print("server running on http://localhost:8000")
 server.serve_forever()
 
-                
