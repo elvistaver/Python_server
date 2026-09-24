@@ -6,13 +6,13 @@ from urllib.parse import urlparse, parse_qs
 def welcome_user(username):
         message=f"Welcome {username}"
         return message
-
-class myhandler(BaseHTTPRequestHandler):
-    def validate_username(self, username):
+def validate_username(self, username):
         if username=="":
             return False
         else:
             return True
+
+class myhandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_url=urlparse(self.path)
         if self.path=="/":
