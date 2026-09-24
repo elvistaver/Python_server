@@ -6,7 +6,7 @@ from urllib.parse import urlparse, parse_qs
 def welcome_user(username):
         message=f"Welcome {username}"
         return message
-def validate_username(self, username):
+def validate_username(username):
         if username=="":
             return False
         else:
@@ -57,7 +57,7 @@ class myhandler(BaseHTTPRequestHandler):
             extract_data= parse_qs(decode_data, keep_blank_values=True)
             grab_data=extract_data.get("user_name", ["Guest"])
             user_name= grab_data[0]
-            is_valid=self.validate_username(user_name)
+            is_valid=validate_username(user_name)
             if is_valid==False:
                 self.send_response(400)
                 print("400 Error: Bad Request")
