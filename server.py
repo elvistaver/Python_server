@@ -3,6 +3,9 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs 
 
+def welcome_user(username):
+        message=f"Welcome {username}"
+        return message
 
 class myhandler(BaseHTTPRequestHandler):
     def validate_username(self, username):
@@ -10,22 +13,19 @@ class myhandler(BaseHTTPRequestHandler):
             return False
         else:
             return True
-    def welcome_user(self,username):
-        message=f"Welcome {username}"
-        return message
     def do_GET(self):
         parsed_url=urlparse(self.path)
         if self.path=="/":
             self.send_response(200)
             print("ok; successful")
-            self.send_header("content-Type", "text/html")
+            self.send_header("Content-Type", "text/html")
             self.end_headers()
             self.wfile.write(b"<h1><marquee> welcome to first python server...</marquee></h1>")
         elif parsed_url.path=="/welcome":
             unpack= parse_qs(parsed_url.query)
             extract=unpack.get("name",["Guest"])
             user_name=extract[0]
-            msg=self.welcome_user(user_name)
+            msg=welcome_user(user_name)
             self.send_response(200)
             print("ok; successful")
             self.send_header("Content-Type", "text/html")
@@ -46,7 +46,7 @@ class myhandler(BaseHTTPRequestHandler):
             self.wfile.write(html.encode("utf-8"))
         else:
             self.send_response(404)
-            print("Faild;404-Error: Not Found")
+            print("Failed;404-Error: Not Found")
             self.end_headers()
             self.wfile.write(b"404 Error:Page Not Found")
     def do_POST(self):
@@ -63,7 +63,7 @@ class myhandler(BaseHTTPRequestHandler):
                 print("400 Error: Bad Request")
                 self.send_header("Content-Type", "text/html")
                 self.end_headers()
-                self.wfile.write(b"inavlid: empty field")
+                self.wfile.write(b"invalid: empty field")
             else:
                 message= f"Hello {user_name}!"
                 self.send_response(200)
